@@ -21,15 +21,32 @@
                 <button type="button" class="btn btn-sm btn-success mt-2 d-table ms-auto add" @click="add">Add a todo !</button>
                 <hr>
                 <h4>Todo List</h4>
-                <div v-if="!todos.length">No item in todos</div>
+                <br/>
+                <h5>Uncompleted</h5>
+                <div v-if="unCompletedTodosCount < 1">No item in completed todos</div>
                 <ul v-else>
-                    <li v-for="todo in todos" class="mb-2">
+                    <li v-for="todo in getTodos(0)" class="mb-2">
                         <div class="d-flex align-items-center justify-content-between mb-2">
                             <span class="d-block">
                                 {{ todo.text }}
                             </span>
                             <div class="d-flex align-items-center justify-content-between">
                                 <button type="button" class="btn btn-sm btn-info text-white me-1" @click="complete(todo.id)">Done</button>
+                                <button type="button" class="btn btn-sm btn-danger" @click="remove(todo.id)">Remove</button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <hr>
+                <h5>Completed</h5>
+                <div v-if="completedTodosCount < 1">No item in ucompleted todos</div>
+                <ul v-else>
+                    <li v-for="todo in getTodos(1)" class="mb-2">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="d-block">
+                                {{ todo.text }}
+                            </span>
+                            <div class="d-flex align-items-center justify-content-between">
                                 <button type="button" class="btn btn-sm btn-danger" @click="remove(todo.id)">Remove</button>
                             </div>
                         </div>

@@ -24,6 +24,9 @@ const app = Vue.createApp({
         complete(id){
             let todoIndex = this.todos.findIndex(todo => todo.id === id);
             this.todos[todoIndex].is_done = 1
+        },
+        getTodos(is_done){
+            return this.todos.filter((todo) => todo.is_done === is_done)
         }
     },
     computed:{
@@ -33,6 +36,8 @@ const app = Vue.createApp({
         unCompletedTodosCount(){
             return this.todos.filter((todo) => !todo.is_done).length;
         }
+    },
+    mounted() {
     }
 }).mount('#app')
 
