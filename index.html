@@ -22,9 +22,17 @@
                 <hr>
                 <h4>Todo List</h4>
                 <div v-if="!todos.length">No item in todos</div>
-                <ul>
-                    <li v-for="todo in todos">
-                        {{ todo.text }}
+                <ul v-else>
+                    <li v-for="todo in todos" class="mb-2">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="d-block">
+                                {{ todo.text }}
+                            </span>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <button type="button" class="btn btn-sm btn-info text-white me-1" @click="complete(todo.id)">Done</button>
+                                <button type="button" class="btn btn-sm btn-danger" @click="remove(todo.id)">Remove</button>
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </div>
