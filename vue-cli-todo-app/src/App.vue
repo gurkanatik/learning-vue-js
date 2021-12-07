@@ -1,26 +1,63 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container pt-4">
+    <div class="row">
+      <div class="col-12 col-sm-4 mx-auto">
+        <AddTodo/>
+        <hr>
+        <Todos/>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import AddTodo from "@/components/AddTodo";
+import Todos from "@/components/Todos";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  components: {AddTodo,Todos},
+  data(){
+    return {
+      provideData: {
+        todos : [
+          {id: 1, text: 'learn vue', is_done: false},
+          {id: 2, text: 'learn vue cli', is_done: false},
+          {id: 3, text: 'learn vue vite', is_done: false},
+          {id: 4, text: 'learn codeigniter', is_done: true},
+          {id: 5, text: 'learn html, css', is_done: true},
+        ]
+      }
+    }
+  },
+  provide(){
+    return{
+      provideData: this.provideData,
+      add: this.add,
+      remove: this.remove,
+      complete: this.complete
+    }
+  },
+  methods: {
+    add(){
+      let todoInput = document.getElementById('todo')
+      this.provideData.todos.push({
+        id: generateId(),
+        text : todoInput.value,
+        is_done : false
+      })
+      todoInput.value = ''
+    },
+    remove(id){
+      this.provideData.todos = this.provideData.todos.filter((todo) => todo.id !== id)
+    },
+    complete(id){
+      let todoIndex = this.provideData.todos.findIndex(todo => todo.id === id);
+      this.provideData.todos[todoIndex].is_done = true
+    }
   }
 }
-</script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+function generateId() {
+  return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
 }
-</style>
+</script>
