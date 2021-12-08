@@ -13,21 +13,21 @@
 <script>
 import AddTodo from "@/components/AddTodo";
 import Todos from "@/components/Todos";
+import axios from "axios";
 
 export default {
   components: {AddTodo,Todos},
   data(){
     return {
       provideData: {
-        todos : [
-          {id: 1, text: 'learn vue', is_done: false},
-          {id: 2, text: 'learn vue cli', is_done: false},
-          {id: 3, text: 'learn vue vite', is_done: false},
-          {id: 4, text: 'learn codeigniter', is_done: true},
-          {id: 5, text: 'learn html, css', is_done: true},
-        ]
+        todos : []
       }
     }
+  },
+  mounted() {
+    axios.get('http://localhost:3000/todos').then((response) => {
+      this.provideData.todos = response.data
+    })
   },
   provide(){
     return{
@@ -39,20 +39,34 @@ export default {
   },
   methods: {
     add(){
-      let todoInput = document.getElementById('todo')
-      this.provideData.todos.push({
+      const todoInput = document.getElementById('todo')
+      const todoData = {
         id: generateId(),
         text : todoInput.value,
         is_done : false
+      }
+
+      axios.post('http://localhost:3000/todos', todoData).then((response) => {
+        console.log(response)
+        this.provideData.todos.push(todoData)
+        todoInput.value = ''
       })
-      todoInput.value = ''
+
     },
     remove(id){
-      this.provideData.todos = this.provideData.todos.filter((todo) => todo.id !== id)
+      axios.delete(`http://localhost:3000/todos/${id}`).then((response) => {
+        console.log(response)
+        this.provideData.todos = this.provideData.todos.filter((todo) => todo.id !== id)
+      })
     },
     complete(id){
-      let todoIndex = this.provideData.todos.findIndex(todo => todo.id === id);
+      const todoIndex = this.provideData.todos.findIndex(todo => todo.id === id);
       this.provideData.todos[todoIndex].is_done = true
+      const todoData = this.provideData.todos[todoIndex]
+
+      axios.put(`http://localhost:3000/todos/${id}`, todoData).then((response) => {
+        console.log(response)
+      })
     }
   }
 }
